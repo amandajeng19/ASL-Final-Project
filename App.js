@@ -6,7 +6,12 @@ import WelcomeScreen from "./src/screens/WelcomeScreen";
 
 export default function App() {
 
-  const Stack = createStackNavigator();
+  const Stack = createStackNavigator({
+    screens: {
+      Welcome: WelcomeScreen,
+      Home: HomeScreen,
+    },
+  });
 
   return (
     <NavigationContainer>
