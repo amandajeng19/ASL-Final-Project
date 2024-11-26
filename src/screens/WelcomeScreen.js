@@ -1,6 +1,5 @@
 import { StyleSheet, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 
-
 export default function WelcomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
