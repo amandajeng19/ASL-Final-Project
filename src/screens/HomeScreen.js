@@ -1,6 +1,6 @@
-import { StyleSheet, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function WelcomeScreen({ navigation }) {
@@ -9,18 +9,18 @@ export default function WelcomeScreen({ navigation }) {
 
   if (!permission) {
     // Camera permissions are still loading.
-    return <View />;
+    return <SafeAreaView />;
   }
 
   if (!permission.granted) {
     // Camera permissions are not granted yet.
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.message}>We need your permission to show the camera!</Text>
         <TouchableOpacity style={styles.button} onPress={requestPermission}>
           <Text style={styles.buttonText}>Grant Camera Permission</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 
