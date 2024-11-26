@@ -1,14 +1,39 @@
-import { StyleSheet, SafeAreaView, Text, TouchableOpacity, Image, View } from 'react-native';
-
+import { StyleSheet, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function WelcomeScreen({ navigation }) {
+  const [facing, setFacing] = useState('front');
+  const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>We need your permission to show the camera!</Text>
+        <TouchableOpacity style={styles.button} onPress={requestPermission}>
+          <Text style={styles.buttonText}>Grant Camera Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const toggleCameraFacing = () => {
+    setFacing(current => (current === 'back' ? 'front' : 'back'));
+    console.log("Camera facing:", facing);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.cameraFeed, {flex: 1}]}></View>
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => navigation.navigate("Home")}>
-          <View style={styles.icon}></View>
+      <CameraView style={[styles.cameraFeed, {flex: 1}]} facing={facing}></CameraView>
+      <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+          <Ionicons name="camera-reverse" size={40} color="black" />
           <Text style={styles.buttonText}>Flip Camera</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -19,13 +44,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     backgroundColor: '#fff',
+  },
+  message: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "medium",
+    color: "#000",
   },
   cameraFeed: {
     width: '94%',
     height: 'auto',
-    backgroundColor: "#000",
   },
   button: {
     flexDirection: 'row',
@@ -40,12 +70,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     fontWeight: "semibold",
+    marginLeft: 16,
     color: "#000",
   },
-  icon: {
-    width: 40,
-    height: 40,
-    marginRight: 16,
-    backgroundColor: "#000",
-  }
 });
